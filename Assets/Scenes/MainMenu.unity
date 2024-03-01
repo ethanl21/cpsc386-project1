@@ -227,7 +227,7 @@ GameObject:
   - component: {fileID: 1317730911}
   - component: {fileID: 1317730913}
   m_Layer: 5
-  m_Name: VisualElement
+  m_Name: MenuVisualElement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
