@@ -16,7 +16,7 @@ public class InputExample : MonoBehaviour
     [SerializeField]
     bool useForce = true;
     [SerializeField]
-    float jumpPower = 6f, moveSpeed = 2.5f;
+    float moveSpeed = 2.5f;
     float physicsModifier = 100f;
 
     Vector2 moveDir = Vector2.zero;
@@ -38,13 +38,6 @@ public class InputExample : MonoBehaviour
     void OnMove(InputValue value)
     {
         moveDir = value.Get<Vector2>() * moveSpeed;
-        Debug.Log(moveDir);
-    }
-    
-
-    void OnJump()
-    {
-        if(jumpingBody) jumpingBody.AddForce(Vector2.up*jumpPower,ForceMode2D.Impulse);
-        Debug.Log("jump");
+        // Debug.Log(moveDir);
     }
 }
