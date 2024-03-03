@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     private UIDocument _uiDocument;
 
     private Label _timeLabel;
+
+    private bool _timerRunning = true;
     private float _currentTime;
 
     private Label _keyLabel;
@@ -23,6 +25,8 @@ public class Player : MonoBehaviour
         _timeLabel = root.Q<Label>("TimerLabel");
         
         _keyLabel = root.Q<Label>("KeyCountLabel");
+        
+        root.Q<Button>("MainMenuButton").clicked += () => SceneManager.LoadScene("Main Menu");
     }
     
   void OnCollisionEnter2D(Collision2D other)
@@ -59,7 +63,31 @@ public class Player : MonoBehaviour
         {
             // game is finished
             Debug.Log("Reached Goal!");
-            SceneManager.LoadScene("Main Menu");
+            _timerRunning = false;
+            
+            // compare high score
+            var highScore = PlayerPrefs.GetFloat("HighScore", _currentTime);
+            var hasHighScore = _currentTime <= highScore;
+            if (hasHighScore)
+            {
+                PlayerPrefs.SetFloat("HighScore", _currentTime);
+            }
+            
+            // set high score text elements
+            var highScoreLabel = _uiDocument.rootVisualElement.Q<Label>("HighScoreLabel");
+            var highScoreTimeSpan = TimeSpan.FromSeconds(highScore);
+            highScoreLabel.text = "High Score: " +  highScoreTimeSpan.Minutes + ":" + highScoreTimeSpan.Seconds + ":" + highScoreTimeSpan.Milliseconds;
+            
+            var currentScoreLabel = _uiDocument.rootVisualElement.Q<Label>("ScoreLabel");
+            var currentTimeSpan = TimeSpan.FromSeconds(_currentTime);
+            currentScoreLabel.text = "Your Score: " + currentTimeSpan.Minutes + ":" + currentTimeSpan.Seconds + ":" + currentTimeSpan.Milliseconds;
+            if (hasHighScore)
+            {
+                currentScoreLabel.text += " (New Record!)";
+            }
+            
+            _uiDocument.rootVisualElement.Q<VisualElement>("HUDBox").visible = false;
+            _uiDocument.rootVisualElement.Q<VisualElement>("EndScreenBox").visible = true;
         }else if (other.gameObject.CompareTag("PowerUp"))
         {
             GameObject.Find("Camera").GetComponent<Camera>().fieldOfView *= 2;
