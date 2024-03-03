@@ -19,10 +19,9 @@ public class Ghost : MonoBehaviour
         {
             // Calculate direction towards the target object
             var direction = (targetObject.transform.position - transform.position).normalized;
-            
+
             // Move towards the target object
             _rb.MovePosition(transform.position + direction * Time.deltaTime);
         }
     }
-    
 }

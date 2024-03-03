@@ -1,36 +1,50 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
+    // Key count of the player
+    private static int _keyCount;
+
     // Movement speed of the player, set in the inspector
     public float moveSpeed = 4f;
-    
-    // Key count of the player
-    private static int _keyCount = 0;
-    
-    // Used to move the player
-    private Vector2 _moveDir = Vector2.zero;
-    private Rigidbody2D _movingBody;
-    
-    // Used to keep track of the user's running time
-    private bool _timerRunning = true;
     private float _currentTime;
-    
+
     // Shows the player their score and keys using UI elements
     private GameHUD _hud;
 
+    // Used to move the player
+    private Vector2 _moveDir;
+    private Rigidbody2D _movingBody;
+
+    // Used to keep track of the user's running time
+    private bool _timerRunning = true;
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _hud = GameObject.Find("GameHUD").GetComponent<GameHUD>();
         _movingBody = GetComponent<Rigidbody2D>();
     }
 
-    void OnCollisionEnter2D(Collision2D other)
+
+    // Update is called once per frame
+    private void Update()
+    {
+        if (!_timerRunning) return;
+        _currentTime += Time.deltaTime;
+
+        _hud.currentTime = _currentTime;
+        _hud.keyCount = _keyCount;
+    }
+
+    // from InputExample.cs
+    private void FixedUpdate()
+    {
+        _movingBody.AddForce(_moveDir * (moveSpeed * Time.deltaTime * 100f), ForceMode2D.Force);
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
     {
         // Debug.Log(""+Key.keyCount);
         // if (other.gameObject.tag=="Fire"){
@@ -46,7 +60,8 @@ public class Player : MonoBehaviour
                 _keyCount -= 1;
                 Destroy(other.gameObject);
             }
-        }else if (other.gameObject.CompareTag("Enemy"))
+        }
+        else if (other.gameObject.CompareTag("Enemy"))
         {
             _timerRunning = false;
             _hud.ShowGameOver();
@@ -85,37 +100,15 @@ public class Player : MonoBehaviour
         else if (other.gameObject.CompareTag("PowerUp"))
         {
             if (other.gameObject.GetComponent<PowerUp>().powerUpType == "Camera")
-            {
                 GameObject.Find("Camera").GetComponent<Camera>().fieldOfView *= 2;
-            }
 
             Destroy(other.gameObject);
         }
     }
 
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (!_timerRunning) return;
-        _currentTime += Time.deltaTime;
-
-        _hud.currentTime = _currentTime;
-        _hud.keyCount = _keyCount;
-    }
-
     // from InputExample.cs
-    void FixedUpdate()
+    private void OnMove(InputValue value)
     {
-        _movingBody.AddForce(_moveDir * (moveSpeed * Time.deltaTime * 100f), ForceMode2D.Force);
-    }
-
-    // from InputExample.cs
-    void OnMove(InputValue value)
-    {
-        if (_timerRunning)
-        {
-            _moveDir = value.Get<Vector2>() * moveSpeed;
-        }
+        if (_timerRunning) _moveDir = value.Get<Vector2>() * moveSpeed;
     }
 }

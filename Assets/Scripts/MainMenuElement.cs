@@ -1,42 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.HID;
-using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class MainMenuElement : MonoBehaviour
 {
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         var root = GetComponent<UIDocument>().rootVisualElement;
-        
+
         var buttonStart = root.Q<Button>("StartButton");
         var buttonQuit = root.Q<Button>("QuitButton");
-        
+
         buttonStart.clicked += () =>
         {
             Debug.Log("Start button clicked");
 
-            var prefix = "Maze";
-            prefix += Random.Range(1, 3);
-            
-            Debug.Log("Loading Level: " + prefix);
+            var levelName = "Maze" + Random.Range(1, 3);
+            ;
 
-            SceneManager.LoadScene(prefix);
+            Debug.Log("Loading Level: " + levelName);
+
+            SceneManager.LoadScene(levelName);
         };
-        
+
         buttonQuit.clicked += () =>
         {
             Debug.Log("Quit button clicked");
             Application.Quit();
         };
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
