@@ -13,18 +13,18 @@ public class MainMenuElement : MonoBehaviour
         var root = GetComponent<UIDocument>().rootVisualElement;
         
         var buttonStart = root.Q<Button>("StartButton");
-        var buttonOptions = root.Q<Button>("OptionsButton");
         var buttonQuit = root.Q<Button>("QuitButton");
         
         buttonStart.clicked += () =>
         {
             Debug.Log("Start button clicked");
-            SceneManager.LoadScene("Maze1");
-        };
-        
-        buttonOptions.clicked += () =>
-        {
-            Debug.Log("Options button clicked");
+
+            var prefix = "Maze";
+            prefix += Random.Range(1, 3);
+            
+            Debug.Log("Loading Level: " + prefix);
+
+            SceneManager.LoadScene(prefix);
         };
         
         buttonQuit.clicked += () =>
