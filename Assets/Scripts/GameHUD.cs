@@ -61,8 +61,10 @@ public class GameHUD : MonoBehaviour
         // Change EndTitleLabel to "Game Over!"
         _root.rootVisualElement.Q<Label>("EndTitleLabel").text = "Game Over!";
 
-        // Hide ScoreContainer
-        _root.rootVisualElement.Q<VisualElement>("ScoreContainer").style.display = DisplayStyle.None;
+        // Hide GameHUDBox
+       _gameHUDBox.style.display = DisplayStyle.None;
+
+        _root.rootVisualElement.Q<VisualElement>("ScoreLabelBox").style.display = DisplayStyle.None;
 
         _gameResultBox.visible = true;
     }

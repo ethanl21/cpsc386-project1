@@ -41,30 +41,30 @@ public class Player : MonoBehaviour
     // from InputExample.cs
     private void FixedUpdate()
     {
-        _movingBody.AddForce(_moveDir * (moveSpeed * Time.deltaTime * 100f), ForceMode2D.Force);
+        if(_timerRunning)
+        {
+            _movingBody.AddForce(_moveDir * (moveSpeed * Time.deltaTime * 100f), ForceMode2D.Force);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        // Debug.Log(""+Key.keyCount);
-        // if (other.gameObject.tag=="Fire"){
-        // Debug.Log("Fire");
-        // Destroy(gameObject);
-        // SceneManager.LoadScene("Main Menu");}
-
-        Debug.Log("Collision detected");
-        if (other.gameObject.CompareTag("Door"))
+        if (_timerRunning)
         {
-            if (_keyCount > 0)
+            if (other.gameObject.CompareTag("Door"))
             {
-                _keyCount -= 1;
-                Destroy(other.gameObject);
+                if (_keyCount > 0)
+                {
+                    _keyCount -= 1;
+                    Destroy(other.gameObject);
+                }
             }
-        }
-        else if (other.gameObject.CompareTag("Enemy"))
-        {
-            _timerRunning = false;
-            _hud.ShowGameOver();
+            else if (other.gameObject.CompareTag("Enemy"))
+            {
+                _timerRunning = false;
+                _movingBody.velocity = Vector2.zero;
+                _hud.ShowGameOver();
+            }
         }
     }
 
@@ -78,6 +78,7 @@ public class Player : MonoBehaviour
         else if (other.gameObject.CompareTag("Fire"))
         {
             _timerRunning = false;
+            _movingBody.velocity = Vector2.zero;
             _hud.ShowGameOver();
         }
         else if (other.gameObject.CompareTag("Finish"))
@@ -85,6 +86,7 @@ public class Player : MonoBehaviour
             // game is finished
             Debug.Log("Reached Goal!");
             _timerRunning = false;
+            _movingBody.velocity = Vector2.zero;
 
             // compare high score
             var highScore = PlayerPrefs.GetFloat("HighScore", _currentTime);
