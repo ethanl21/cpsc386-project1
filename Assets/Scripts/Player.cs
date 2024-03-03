@@ -46,6 +46,10 @@ public class Player : MonoBehaviour
                 _keyCount -= 1;
                 Destroy(other.gameObject);
             }
+        }else if (other.gameObject.CompareTag("Enemy"))
+        {
+            _timerRunning = false;
+            _hud.ShowGameOver();
         }
     }
 
@@ -58,9 +62,8 @@ public class Player : MonoBehaviour
         }
         else if (other.gameObject.CompareTag("Fire"))
         {
-            Debug.Log("Fire");
-            Destroy(gameObject);
-            SceneManager.LoadScene("Main Menu");
+            _timerRunning = false;
+            _hud.ShowGameOver();
         }
         else if (other.gameObject.CompareTag("Finish"))
         {
@@ -110,6 +113,9 @@ public class Player : MonoBehaviour
     // from InputExample.cs
     void OnMove(InputValue value)
     {
-        _moveDir = value.Get<Vector2>() * moveSpeed;
+        if (_timerRunning)
+        {
+            _moveDir = value.Get<Vector2>() * moveSpeed;
+        }
     }
 }

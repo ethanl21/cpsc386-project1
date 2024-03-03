@@ -9,11 +9,12 @@ TagManager:
   - Key
   - Door
   - PowerUp
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Walls
   - Water
   - UI
   - 
