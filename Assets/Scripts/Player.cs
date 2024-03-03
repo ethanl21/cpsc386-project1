@@ -5,28 +5,17 @@ using UnityEngine.UIElements;
 public class Player : MonoBehaviour
 {
     public static int keyCount = 0;
-    
-    private UIDocument _uiDocument;
-
-    private Label _timeLabel;
 
     private bool _timerRunning = true;
     private float _currentTime;
 
-    private Label _keyLabel;
+    private GameHUD _hud;
+
     
-   
     // Start is called before the first frame update
     void Start()
     {
-        _uiDocument = GameObject.Find("HUDElement").GetComponent<UIDocument>();
-
-        var root = _uiDocument.rootVisualElement;
-        _timeLabel = root.Q<Label>("TimerLabel");
-        
-        _keyLabel = root.Q<Label>("KeyCountLabel");
-        
-        root.Q<Button>("MainMenuButton").clicked += () => SceneManager.LoadScene("Main Menu");
+        _hud = GameObject.Find("GameHUD").GetComponent<GameHUD>();
     }
     
   void OnCollisionEnter2D(Collision2D other)
@@ -71,23 +60,10 @@ public class Player : MonoBehaviour
             if (hasHighScore)
             {
                 PlayerPrefs.SetFloat("HighScore", _currentTime);
+                highScore = _currentTime;
             }
             
-            // set high score text elements
-            var highScoreLabel = _uiDocument.rootVisualElement.Q<Label>("HighScoreLabel");
-            var highScoreTimeSpan = TimeSpan.FromSeconds(highScore);
-            highScoreLabel.text = "High Score: " +  highScoreTimeSpan.Minutes + ":" + highScoreTimeSpan.Seconds + ":" + highScoreTimeSpan.Milliseconds;
-            
-            var currentScoreLabel = _uiDocument.rootVisualElement.Q<Label>("ScoreLabel");
-            var currentTimeSpan = TimeSpan.FromSeconds(_currentTime);
-            currentScoreLabel.text = "Your Score: " + currentTimeSpan.Minutes + ":" + currentTimeSpan.Seconds + ":" + currentTimeSpan.Milliseconds;
-            if (hasHighScore)
-            {
-                currentScoreLabel.text += " (New Record!)";
-            }
-            
-            _uiDocument.rootVisualElement.Q<VisualElement>("HUDBox").visible = false;
-            _uiDocument.rootVisualElement.Q<VisualElement>("EndScreenBox").visible = true;
+            _hud.ShowEndScreen(highScore, _currentTime, hasHighScore);   
         }else if (other.gameObject.CompareTag("PowerUp"))
         {
             if (other.gameObject.GetComponent<PowerUp>().powerUpType == "Camera")
@@ -105,9 +81,9 @@ public class Player : MonoBehaviour
     {
         if (!_timerRunning) return;
         _currentTime += Time.deltaTime;
-        var timespan = TimeSpan.FromSeconds(_currentTime);
-        _timeLabel.text = "Time: " + timespan.Minutes + ":" + timespan.Seconds + ":" + timespan.Milliseconds;
-        
-        _keyLabel.text = "x" + keyCount;
+
+        _hud.currentTime = _currentTime;
+        _hud.keyCount = keyCount;
+
     }
 }
