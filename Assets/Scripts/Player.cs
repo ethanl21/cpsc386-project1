@@ -90,7 +90,11 @@ public class Player : MonoBehaviour
             _uiDocument.rootVisualElement.Q<VisualElement>("EndScreenBox").visible = true;
         }else if (other.gameObject.CompareTag("PowerUp"))
         {
-            GameObject.Find("Camera").GetComponent<Camera>().fieldOfView *= 2;
+            if (other.gameObject.GetComponent<PowerUp>().powerUpType == "Camera")
+            {
+                GameObject.Find("Camera").GetComponent<Camera>().fieldOfView *= 2;
+            }
+            
             Destroy(other.gameObject);
         }
     }
