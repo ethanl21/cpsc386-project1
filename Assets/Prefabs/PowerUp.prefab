@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 1699161340950234068}
   - component: {fileID: 7086738285702665243}
   - component: {fileID: 8927533981655134826}
+  - component: {fileID: 7980300738646652588}
   m_Layer: 0
   m_Name: PowerUp
   m_TagString: PowerUp
@@ -205,3 +206,16 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &7980300738646652588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7905205584754695424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c83c8fda7e1a4fde96d5f7ffed5d1f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  powerUpType: Camera
